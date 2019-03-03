@@ -1,0 +1,23 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+python-dotenv = "*"
+flask-moment = "*"
+flask-sqlalchemy = "*"
+flask-wtf = "*"
+flask-migrate = "*"
+bootstrap-flask = "*"
+redis = "*"
+flask-session = "*"
+python-editor = "*"
+mysqldb = "*"
+flask-mysqldb = "*"
+flask-script = "*"
+
+[requires]
+python_version = "3.5"
