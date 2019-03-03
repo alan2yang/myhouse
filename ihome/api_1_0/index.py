@@ -1,4 +1,4 @@
-from flask import Blueprint
+
 from flask import abort
 from flask import current_app
 from flask import flash
@@ -10,8 +10,7 @@ from flask import url_for
 
 from ihome.extensions import db
 
-
-api = Blueprint('api', __name__)
+from . import api
 
 
 @api.route('/')

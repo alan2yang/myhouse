@@ -45,10 +45,9 @@ class BaseConfig(object):
 
 
 class DevelopmentConfig(BaseConfig):
-    print("*"*50)
     # SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
     SQLALCHEMY_DATABASE_URI="mysql://{}:{}@{}:{}/ihome".format(BaseConfig.DATABASE_NAME,BaseConfig.DATABASE_PASSWORD,BaseConfig.DATABASE_IP,BaseConfig.DATABASE_PORT)
-    print(SQLALCHEMY_DATABASE_URI)
+
 
 class TestingConfig(BaseConfig):
     TESTING = True
