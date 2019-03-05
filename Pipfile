@@ -20,6 +20,7 @@ flask-mysqldb = "*"
 flask-script = "*"
 pillow = "*"
 qiniu = "*"
+celery = "*"
 
 [requires]
 python_version = "3.5"

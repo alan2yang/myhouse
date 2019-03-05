@@ -111,17 +111,16 @@ def get_sms_code(mobile):
         return jsonify(errno=RET.DBERR, errmsg="保存短信验证码异常")
 
     # 发送短信
-    # todo 异步执行
-    try:
-        ccp = CCP()
-        result = ccp.send_template_sms(mobile, [sms_code, int(current_app.config['SMS_CODE_REDIS_EXPIRES']/60)], 1)
-    except Exception as e:
-        current_app.logger.error(e)
-        return jsonify(errno=RET.THIRDERR, errmsg="发送异常")
+    # 异步执行
+    from ihome.tasks.sms_task import send_sms
 
-    # 返回值
-    if result == 0:
-        # 发送成功
-        return jsonify(errno=RET.OK, errmsg="短信发送成功")
-    else:
-        return jsonify(errno=RET.THIRDERR, errmsg="短信发送失败")
+    send_sms.delay(mobile, [sms_code, int(current_app.config['SMS_CODE_REDIS_EXPIRES']/60)], 1)
+    # try:
+    #     ccp = CCP(mobile, [sms_code, int(current_app.config['SMS_CODE_REDIS_EXPIRES']/60)], 1)
+    #     result = ccp.send_template_sms(mobile, [sms_code, int(current_app.config['SMS_CODE_REDIS_EXPIRES']/60)], 1)
+    # except Exception as e:
+    #     current_app.logger.error(e)
+    #     return jsonify(errno=RET.THIRDERR, errmsg="发送异常")
+
+    # 发送成功
+    return jsonify(errno=RET.OK, errmsg="短信发送成功")
