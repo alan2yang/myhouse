@@ -18,6 +18,8 @@ python-editor = "*"
 mysqldb = "*"
 flask-mysqldb = "*"
 flask-script = "*"
+pillow = "*"
+qiniu = "*"
 
 [requires]
 python_version = "3.5"

@@ -20,5 +20,5 @@ def index():
     :return:
     """
 
-    return render_template('index/index.html')
+    return "kong"
 

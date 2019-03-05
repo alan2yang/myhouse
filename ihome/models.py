@@ -32,9 +32,7 @@ class User(BaseModel, db.Model):
     @property
     def password(self):
         """读取属性的函数行为"""
-        # print(user.password)  # 读取属性时被调用
         # 函数的返回值会作为属性值
-        # return "xxxx"
         raise AttributeError("这个属性只能设置，不能读取")
 
     # 使用这个装饰器, 对应设置属性操作
