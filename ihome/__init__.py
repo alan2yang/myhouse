@@ -21,7 +21,7 @@ def create_app(config_name=None):
 
     # redis的配置
     global REDIS_STORE
-    REDIS_STORE = redis.StrictRedis(host=config_class.REDIS_IP, port=config_class.REDIS_PORT)
+    REDIS_STORE = redis.StrictRedis(host=config_class.REDIS_IP, port=config_class.REDIS_PORT,decode_responses=True)
 
     # 导入注册函数
     from ihome.mylogs import register_logging

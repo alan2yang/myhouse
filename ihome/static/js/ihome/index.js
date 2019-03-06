@@ -72,21 +72,37 @@ $(document).ready(function(){
         }
     );
 
+    //　获取首页房屋信息
+    $.get("/api/v1.0/houses/index", function(resp){
+        if ("0" == resp.errno) {
+            $(".swiper-wrapper").html(template("swiper-houses-tmpl", {houses:resp.data}));
 
-
-    var mySwiper = new Swiper ('.swiper-container', {
-        loop: true,
-        autoplay: 2000,
-        autoplayDisableOnInteraction: false,
-        pagination: '.swiper-pagination',
-        paginationClickable: true
-    }); 
-    $(".area-list a").click(function(e){
-        $("#area-btn").html($(this).html());
-        $(".search-btn").attr("area-id", $(this).attr("area-id"));
-        $(".search-btn").attr("area-name", $(this).html());
-        $("#area-modal").modal("hide");
+            // 设置幻灯片对象，开启幻灯片滚动
+            var mySwiper = new Swiper ('.swiper-container', {
+                loop: true,
+                autoplay: 2000,
+                autoplayDisableOnInteraction: false,
+                pagination: '.swiper-pagination',
+                paginationClickable: true
+            });
+        }
     });
+
+    //　获取城区信息
+    $.get("/api/v1.0/areas", function(resp){
+        if ("0" == resp.errno) {
+            $(".area-list").html(template("area-list-tmpl", {areas:resp.data}));
+
+            $(".area-list a").click(function(e){
+                $("#area-btn").html($(this).html());
+                $(".search-btn").attr("area-id", $(this).attr("area-id"));
+                $(".search-btn").attr("area-name", $(this).html());
+                $("#area-modal").modal("hide");
+            });
+        }
+    });
+
+
     $('.modal').on('show.bs.modal', centerModals);      //当模态框出现的时候
     $(window).on('resize', centerModals);               //当窗口大小变化的时候
     $("#start-date").datepicker({
@@ -99,4 +115,6 @@ $(document).ready(function(){
         var date = $(this).datepicker("getFormattedDate");
         $("#start-date-input").val(date);
     });
-})
+
+
+});

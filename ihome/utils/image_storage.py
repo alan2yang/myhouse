@@ -1,10 +1,12 @@
+import os
+
 from qiniu import Auth, put_data, etag
 import qiniu.config
 
 
 # 需要填写你的 Access Key 和 Secret Key
-access_key = 'Access_Key'
-secret_key = 'Secret_Key'
+access_key = os.getenv("Access_Key")
+secret_key = os.getenv("Secret_Key")
 
 
 def storage(file_data):
@@ -12,7 +14,7 @@ def storage(file_data):
     q = Auth(access_key, secret_key)
 
     # 要上传的空间
-    bucket_name = 'Bucket_Name'
+    bucket_name = 'images'
 
     # 生成上传 Token，可以指定过期时间等
     token = q.upload_token(bucket_name, None, 3600)
@@ -33,4 +35,6 @@ def storage(file_data):
 
 
 if __name__ == '__main__':
-    storage()
+    with open("./cat.jpg", "rb") as f:
+        file_data = f.read()
+        storage(file_data)

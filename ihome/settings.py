@@ -49,7 +49,7 @@ class BaseConfig(object):
     LOGIN_ERROR_FORBID_TIME = 600
 
     # 七牛的域名
-    QINIU_URL_DOMAIN = "http://o91qujnqh.bkt.clouddn.com/"
+    QINIU_URL_DOMAIN = "http://pnxo61idw.bkt.clouddn.com/"
 
     # 城区信息的缓存时间, 单位：秒
     AREA_INFO_REDIS_CACHE_EXPIRES = 7200

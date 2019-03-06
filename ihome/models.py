@@ -1,9 +1,9 @@
 # 模型类
 from datetime import datetime
+
+from flask import current_app
 from werkzeug.security import generate_password_hash,check_password_hash
 from ihome.extensions import db
-
-constants=dict(QINIU_URL_DOMAIN='hello')
 
 
 class BaseModel(object):
@@ -63,7 +63,7 @@ class User(BaseModel, db.Model):
             "user_id": self.id,
             "name": self.name,
             "mobile": self.mobile,
-            "avatar": constants.QINIU_URL_DOMAIN + self.avatar_url if self.avatar_url else "",
+            "avatar": current_app.config["QINIU_URL_DOMAIN"] + self.avatar_url if self.avatar_url else "",
             "create_time": self.create_time.strftime("%Y-%m-%d %H:%M:%S")
         }
         return user_dict
@@ -136,11 +136,11 @@ class House(BaseModel, db.Model):
             "title": self.title,
             "price": self.price,
             "area_name": self.area.name,
-            "img_url": constants.QINIU_URL_DOMAIN + self.index_image_url if self.index_image_url else "",
+            "img_url": current_app.config["QINIU_URL_DOMAIN"] + self.index_image_url if self.index_image_url else "",
             "room_count": self.room_count,
             "order_count": self.order_count,
             "address": self.address,
-            "user_avatar": constants.QINIU_URL_DOMAIN + self.user.avatar_url if self.user.avatar_url else "",
+            "user_avatar": current_app.config["QINIU_URL_DOMAIN"] + self.user.avatar_url if self.user.avatar_url else "",
             "ctime": self.create_time.strftime("%Y-%m-%d")
         }
         return house_dict
@@ -151,7 +151,7 @@ class House(BaseModel, db.Model):
             "hid": self.id,
             "user_id": self.user_id,
             "user_name": self.user.name,
-            "user_avatar": constants.QINIU_URL_DOMAIN + self.user.avatar_url if self.user.avatar_url else "",
+            "user_avatar": current_app.config["QINIU_URL_DOMAIN"] + self.user.avatar_url if self.user.avatar_url else "",
             "title": self.title,
             "price": self.price,
             "address": self.address,
@@ -168,7 +168,7 @@ class House(BaseModel, db.Model):
         # 房屋图片
         img_urls = []
         for image in self.images:
-            img_urls.append(constants.QINIU_URL_DOMAIN + image.url)
+            img_urls.append(current_app.config["QINIU_URL_DOMAIN"] + image.url)
         house_dict["img_urls"] = img_urls
 
         # 房屋设施
@@ -178,9 +178,10 @@ class House(BaseModel, db.Model):
         house_dict["facilities"] = facilities
 
         # 评论信息
+        # 评论依赖于订单，从所有订单中过滤，获得：房屋id和该房屋一致的，完成的，评论不为空的
         comments = []
         orders = Order.query.filter(Order.house_id == self.id, Order.status == "COMPLETE", Order.comment != None)\
-            .order_by(Order.update_time.desc()).limit(constants.HOUSE_DETAIL_COMMENT_DISPLAY_COUNTS)
+            .order_by(Order.update_time.desc()).limit(current_app.config["HOUSE_DETAIL_COMMENT_DISPLAY_COUNTS"])
         for order in orders:
             comment = {
                 "comment": order.comment,  # 评论的内容
@@ -243,7 +244,7 @@ class Order(BaseModel, db.Model):
         order_dict = {
             "order_id": self.id,
             "title": self.house.title,
-            "img_url": constants.QINIU_URL_DOMAIN + self.house.index_image_url if self.house.index_image_url else "",
+            "img_url": current_app.config["QINIU_URL_DOMAIN"] + self.house.index_image_url if self.house.index_image_url else "",
             "start_date": self.begin_date.strftime("%Y-%m-%d"),
             "end_date": self.end_date.strftime("%Y-%m-%d"),
             "ctime": self.create_time.strftime("%Y-%m-%d %H:%M:%S"),
