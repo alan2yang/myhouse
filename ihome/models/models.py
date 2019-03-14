@@ -214,7 +214,6 @@ class HouseImage(BaseModel, db.Model):
 
 class Order(BaseModel, db.Model):
     """订单"""
-
     __tablename__ = "ih_order_info"
 
     id = db.Column(db.Integer, primary_key=True)  # 订单编号
@@ -237,7 +236,7 @@ class Order(BaseModel, db.Model):
         ),
         default="WAIT_ACCEPT", index=True)    # 指明在mysql中这个字段建立索引，加快查询速度
     comment = db.Column(db.Text)  # 订单的评论信息或者拒单原因
-    trade_no = db.Column(db.String(80))  # 交易的流水号 支付宝的
+    trade_no = db.Column(db.String(80))  # 支付宝的交易的流水号
 
     def to_dict(self):
         """将订单信息转换为字典数据"""
