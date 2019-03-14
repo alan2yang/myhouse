@@ -1,5 +1,4 @@
 import os
-import sys
 import redis
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))

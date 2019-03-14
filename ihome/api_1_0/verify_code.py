@@ -1,15 +1,13 @@
 import random
 
+from flask import current_app,make_response,jsonify
 from flask import request
 
-from . import api
-from ihome.utils.captcha.captcha import captcha
-
-from flask import current_app,make_response,jsonify
-from ihome.utils.response_code import RET
-from ihome.models import User
-from ihome.libs.ytx.sms import CCP
 from ihome import REDIS_STORE
+from ihome.libs.utils.response_code import RET
+from ihome.libs.utils.captcha.captcha import captcha
+from ihome.models.models import User
+from . import api
 
 
 # GET 127.0.0.1/api/v1.0/image_codes/<image_code_id>
@@ -73,7 +71,7 @@ def get_sms_code(mobile):
         current_app.logger.error(e)
 
     # 与用户填写的值进行对比
-    if real_image_code.decode().lower() != image_code.lower():
+    if real_image_code.lower() != image_code.lower():
         # 表示用户填写错误
         return jsonify(errno=RET.DATAERR, errmsg="图片验证码错误")
 

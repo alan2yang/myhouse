@@ -21,6 +21,7 @@ flask-script = "*"
 pillow = "*"
 qiniu = "*"
 celery = "*"
+python-alipay-sdk = "*"
 
 [requires]
 python_version = "3.5"

@@ -1,14 +1,15 @@
+from datetime import datetime
+
 from flask import current_app
 from flask import g, jsonify
 from flask import request
+from ihome.libs.utils.response_code import RET
 
-from ihome.extensions import db
-from ihome.models import Order, House
-from ihome.utils.response_code import RET
-from . import api
-from ihome.utils.utils import login_required
-from datetime import datetime
 from ihome import REDIS_STORE
+from ihome.libs.utils.utils import login_required
+from ihome.models.models import Order, House
+from ihome.registers import db
+from . import api
 
 
 @api.route("/orders",methods=["POST"])
@@ -99,7 +100,6 @@ def get_order():
 
     # 获取用户角色：买家？卖家？
     role=request.args.get("role","")
-    print('*'*50,role,'*'*50)
 
     try:
         if role=="landlord":  # 卖家
@@ -172,7 +172,7 @@ def accept_reject_order(order_id):
     return jsonify(errno=RET.OK, errmsg="OK")
 
 
-@api.route("/orders/<int:order_id>/comment",methods=["POST"])
+@api.route("/orders/<int:order_id>/comment",methods=["PUT"])
 @login_required
 def save_order_comment(order_id):
     """

@@ -1,12 +1,12 @@
-from flask import session
-
-from ihome.extensions import db
-from ihome.models import User
-from ihome.utils.image_storage import storage
-from ihome.utils.response_code import RET
-from . import api
-from ihome.utils.utils import login_required
 from flask import g,current_app,jsonify,request
+from flask import session
+from ihome.libs.utils.image_storage import storage
+from ihome.libs.utils.response_code import RET
+
+from ihome.libs.utils.utils import login_required
+from ihome.models.models import User
+from ihome.registers import db
+from . import api
 
 
 @api.route("/users/avatar",methods=["POST"])

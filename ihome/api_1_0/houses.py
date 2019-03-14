@@ -1,14 +1,15 @@
+from datetime import datetime
+
 from flask import current_app, jsonify,json,request,g
 from flask import session
+from ihome.libs.utils.image_storage import storage
+from ihome.libs.utils.response_code import RET
 
-from ihome.api_1_0 import api
-from ihome.extensions import db
-from ihome.models import Area, House, Facility, HouseImage, User, Order
-from ihome.utils.response_code import RET
 from ihome import REDIS_STORE
-from ihome.utils.utils import login_required
-from ihome.utils.image_storage import storage
-from datetime import datetime
+from ihome.api_1_0 import api
+from ihome.libs.utils.utils import login_required
+from ihome.models.models import Area, House, Facility, HouseImage, User, Order
+from ihome.registers import db
 
 
 @api.route("/areas")
@@ -253,7 +254,7 @@ def get_houses_index():
     # 缓存中没有，则从数据库中取
     try:
         # 查询数据库，返回房屋订单数目最多的5条数据
-        houses = House.query.order_by(House.order_count.desc()).limit(constants.HOME_PAGE_MAX_HOUSES)
+        houses = House.query.order_by(House.order_count.desc()).limit(current_app.config['HOME_PAGE_MAX_HOUSES'])
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=RET.DBERR, errmsg="查询数据失败")

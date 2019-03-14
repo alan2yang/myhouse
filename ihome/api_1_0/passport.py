@@ -1,12 +1,14 @@
-from ihome.utils.utils import login_required
-from . import api
-from flask import request,jsonify,current_app,session
-from ihome.utils.response_code import RET
 import re
-from ihome.models import User
-from ihome import REDIS_STORE
-from ihome.extensions import db
+
+from flask import request,jsonify,current_app,session
+from ihome.libs.utils.response_code import RET
 from sqlalchemy.exc import IntegrityError
+
+from ihome import REDIS_STORE
+from ihome.libs.utils.utils import login_required
+from ihome.models.models import User
+from ihome.registers import db
+from . import api
 
 
 @api.route("/users", methods=["POST"])
@@ -53,7 +55,7 @@ def register():
         current_app.logger.error(e)
 
     # 判断用户填写短信验证码的正确性
-    if real_sms_code.decode() != sms_code:
+    if real_sms_code!= sms_code:
         return jsonify(errno=RET.DATAERR, errmsg="短信验证码错误")
 
     # 保存用户的注册数据到数据库中

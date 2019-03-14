@@ -1,8 +1,20 @@
-from ihome.extensions import bootstrap, db, moment,  csrf, migrate, new_session
-from flask import render_template
+from flask_bootstrap import Bootstrap
+from flask_migrate import Migrate
+from flask_moment import Moment
+from flask_session import Session
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFProtect
+
+bootstrap = Bootstrap()
+db = SQLAlchemy()
+moment = Moment()
+csrf=CSRFProtect()
+migrate=Migrate()
+new_session=Session()
+
+
 from ihome.api_1_0 import api
-from flask_wtf.csrf import CSRFError
-from ihome.utils.utils import RegxConverter
+from ihome.libs.utils.utils import RegxConverter
 from ihome.static_blueprint import html
 
 
@@ -78,3 +90,55 @@ def register_errors(app):
     # @app.errorhandler(CSRFError)
     # def handle_csrf_error(e):
     #     return render_template('errors/400.html', description=e.description), 400
+
+
+import logging
+from logging.handlers import RotatingFileHandler
+
+
+def register_logging(app):
+    # todo　通过邮件发送关键日志
+    """
+    注册日志功能
+    :param app:
+    :return:
+    """
+    # 日志记录器
+    app.logger.setLevel(logging.INFO)  # 日志记录器等级
+
+    formatter=logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # 日志处理器
+    file_handler=RotatingFileHandler('logs/index.log',maxBytes=10*1024*1024,backupCount=10)
+
+    file_handler.setFormatter(formatter)  # 日志处理器输出的日志格式
+    file_handler.setLevel(logging.INFO)  # 日志处理器接收的日志等级
+
+    if not app.debug:  # 不是调试模式，为日志记录器添加处理器
+        app.logger.addHandler(file_handler)
+
+
+import click
+
+
+def register_commands(app):
+    """
+    自定义flask命令
+    :param app:
+    :return:
+    """
+
+    @app.cli.command()
+    @click.option('--drop', is_flag=True, help='Create after drop.')
+    def initdb(drop):
+        """
+        初始化数据库
+        :param drop:
+        :return:
+        """
+        if drop:
+            click.confirm('This operation will delete the database, do you want to continue?', abort=True)
+            db.drop_all()
+            click.echo('Drop tables.')
+        db.create_all()
+        click.echo('Initialized database.')

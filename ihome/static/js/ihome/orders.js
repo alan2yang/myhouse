@@ -34,7 +34,7 @@ $(document).ready(function(){
                         if ("4101" == resp.errno) {
                             location.href = "/login.html";
                         } else if ("0" == resp.errno) {
-                            // 引导用户跳转到支付宝连接
+                            // 跳转到支付宝支付页面
                             location.href = resp.data.pay_url;
                         }
                     }

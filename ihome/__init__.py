@@ -1,10 +1,11 @@
 #  -*- coding: utf-8 -*-
 
 import os
+
 import redis
 from flask import Flask
-from ihome.settings import config
 
+from ihome.config.settings import config
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -19,14 +20,18 @@ def create_app(config_name=None):
     config_class=config[config_name]
     app.config.from_object(config_class)
 
-    # redis的配置
+    # redis的配置:用于缓存
     global REDIS_STORE
     REDIS_STORE = redis.StrictRedis(host=config_class.REDIS_IP, port=config_class.REDIS_PORT,decode_responses=True)
 
     # 导入注册函数
-    from ihome.mylogs import register_logging
-    from ihome.registers import register_template_context,register_shell_context,register_blueprints,register_errors,register_extensions
-    from ihome.commands import register_commands
+
+    from ihome.registers import register_template_context,\
+        register_shell_context,\
+        register_blueprints,\
+        register_errors,\
+        register_extensions,register_logging, \
+        register_commands
 
     register_extensions(app)
     register_commands(app)

@@ -4,7 +4,7 @@ from functools import wraps
 from flask import session, jsonify
 from werkzeug.routing import BaseConverter
 
-from ihome.utils.response_code import RET
+from ihome.libs.utils.response_code import RET
 
 try:
     from urlparse import urlparse, urljoin
@@ -49,7 +49,6 @@ class RegxConverter(BaseConverter):
 
 # 登录验证装饰器
 def login_required(view_func):
-
     @wraps(view_func)
     def wrapper(*args,**kwargs):
         user_id=session.get("user_id")
